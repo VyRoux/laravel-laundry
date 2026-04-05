@@ -12,7 +12,10 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        // Ambil data member dari database
+        $members = Member::all();
+        // Kirim ke view di folder resources/views/admin/member/index.blade.php
+        return view('admin.member.index', compact('members'));
     }
 
     /**
@@ -20,7 +23,8 @@ class MemberController extends Controller
      */
     public function create()
     {
-        //
+        // Tampilkan form untuk membuat member baru
+        return view('admin.member.create');
     }
 
     /**
@@ -28,7 +32,20 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi data yang baru masuk
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|min:5',
+            'phone_number' => 'required|numeric',
+            'gender' => 'required|in:laki-laki,perempuan',
+        ]);
+
+        // JIka validasi berhasil, maka simpan data ini ke database
+        Member::create($request->all());
+
+        // Seletah selesai, kembalikan ke halaman index
+        return redirect()->route('member.index')
+            ->with('success', 'Member berhasil ditambahkan.');
     }
 
     /**

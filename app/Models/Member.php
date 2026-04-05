@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
+    protected $table = 'tbl_member';
     protected $fillable = [
-        'nama',
-        'alamat',
-        'jenis_kelamin',
-        'telepon',
+        'name',
+        'address',
+        'gender',
+        'phone_number',
     ];
 }

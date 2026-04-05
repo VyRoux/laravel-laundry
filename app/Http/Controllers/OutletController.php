@@ -12,7 +12,9 @@ class OutletController extends Controller
      */
     public function index()
     {
-        //
+        // Ambil semua data outlet
+        $outlets = Outlet::all();
+        return view('admin.outlet.index', compact('outlets'));
     }
 
     /**
@@ -20,7 +22,7 @@ class OutletController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.outlet.create');
     }
 
     /**
@@ -28,7 +30,16 @@ class OutletController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'phone_number' => 'nullable',
+        ]);
+
+        Outlet::create($request->all());
+
+        return redirect()->route('outlet.index')
+            ->with('success', 'Outlet baru berhasil ditambahkan.');
     }
 
     /**

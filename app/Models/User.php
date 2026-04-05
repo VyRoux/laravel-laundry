@@ -7,12 +7,23 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
 
-    protected $table = 'table_user';
+    protected $table = 'tbl_user';
     protected $fillable = [
-        'nama',
+        'name',
         'username',
         'password',
-        'id_outlet',
+        'outlet_id',
         'role'
     ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    // Membuat relasi dengan tabel outlet
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class, 'outlet_id');
+    }
 }

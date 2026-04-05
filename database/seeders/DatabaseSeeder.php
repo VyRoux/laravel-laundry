@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use \App\Models\Outlet;
+use \App\Models\User;
+use Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +17,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $outlet = Outlet::create([
+            'name' => 'Laundry Pusat',
+            'address' => 'Jl. Laundry Bebas',
+            'phone_number' => '081234567890',
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        ]);
+
+        User::create([
+            'name' => 'Admin Laundry',
+            'username' => 'admin',
+            'password' => Hash::make('admin123'),
+            'outlet_id' => $outlet->id,
+            'role' => 'admin',
         ]);
     }
 }
