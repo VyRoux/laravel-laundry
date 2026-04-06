@@ -67,7 +67,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $outlets = Outlet::all();
+
+        return view('admin.user.edit', compact('user','outlets'));
     }
 
     /**

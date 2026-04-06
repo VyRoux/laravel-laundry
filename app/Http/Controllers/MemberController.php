@@ -61,7 +61,7 @@ class MemberController extends Controller
      */
     public function edit(Member $member)
     {
-        //
+        return view('admin.member.edit', compact('member'));
     }
 
     /**

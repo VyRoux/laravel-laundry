@@ -55,7 +55,7 @@ class OutletController extends Controller
      */
     public function edit(Outlet $outlet)
     {
-        //
+        return view('admin.outlet.edit', compact('outlet'));
     }
 
     /**
