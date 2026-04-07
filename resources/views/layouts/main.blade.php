@@ -12,14 +12,14 @@
 
     {{-- Overlay untuk mobile --}}
     <div x-show="sidebarOpen" x-cloak 
-         class="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden"
-         @click="sidebarOpen = false"
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0">
+        class="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden"
+        @click="sidebarOpen = false"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0">
     </div>
 
     {{-- Container utama flex h-screen --}}
@@ -100,6 +100,41 @@
             <main class="flex-1 overflow-y-auto p-6 bg-slate-50">
                 <div class="max-w-7xl mx-auto">
                     <h1 class="text-2xl font-bold text-slate-800 mb-6">@yield('title')</h1>
+                    
+                    {{-- Area Notifikasi --}}
+                <div class="max-w-7xl mx-auto px-4 mb-4">
+                    @if(session('success'))
+                        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
+                            class="flex items-center p-4 mb-4 text-emerald-800 bg-emerald-50 border border-emerald-100 rounded-2xl shadow-sm transition-all duration-500">
+                            <span class="font-semibold text-sm">{{ session('success') }}</span>
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div x-data="{ show: true }" x-show="show" 
+                            class="flex items-center justify-between p-4 mb-4 text-red-800 bg-red-50 border border-red-100 rounded-2xl shadow-sm">
+                            <span class="font-semibold text-sm">{{ session('error') }}</span>
+                            <button @click="show = false" class="text-red-500 hover:text-red-700 font-bold">×</button>
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+    <div x-data="{ show: true }" x-show="show" class="max-w-7xl mx-auto px-4 mb-4">
+        <div class="flex items-center justify-between p-4 bg-red-50 border border-red-100 text-red-800 rounded-2xl shadow-sm">
+            <div class="flex flex-col">
+                <span class="font-bold text-sm">Ups! Ada yang salah:</span>
+                <ul class="text-xs list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <button @click="show = false" class="text-red-500 hover:text-red-700 font-bold">×</button>
+        </div>
+    </div>
+@endif
+                </div>
+
                     @yield('content')
                 </div>
             </main>

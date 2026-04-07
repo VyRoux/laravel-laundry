@@ -63,7 +63,16 @@ class OutletController extends Controller
      */
     public function update(Request $request, Outlet $outlet)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'phone_number' => 'required',
+        ]);
+
+        $data = $request->all();
+        $outlet->update($data);
+        return redirect()->route('outlet.index')
+            ->with('success', 'Outlet berhasil diperbaharui.');
     }
 
     /**
@@ -71,6 +80,13 @@ class OutletController extends Controller
      */
     public function destroy(Outlet $outlet)
     {
-        //
+        // Cek apakah ada user yang masih terhubung ke outlet ini
+    if ($outlet->users()->count() > 0) {
+        return back()->with('error', 'Outlet tidak bisa dihapus karena masih memiliki pegawai!');
+    }
+
+        $outlet->delete();
+        return redirect()->route('outlet.index')
+            ->with('success','Outlet berhasil dihapus.');
     }
 }

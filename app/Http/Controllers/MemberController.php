@@ -35,7 +35,7 @@ class MemberController extends Controller
         // Validasi data yang baru masuk
         $request->validate([
             'name' => 'required|string|max:255',
-            'address' => 'required|min:5',
+            'address' => 'required',
             'phone_number' => 'required|numeric',
             'gender' => 'required|in:laki-laki,perempuan',
         ]);
@@ -77,6 +77,8 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
-        //
+        $member->delete();
+        return redirect()->route('member.index')
+            ->with('success','Member berhasil dihapus.');
     }
 }
