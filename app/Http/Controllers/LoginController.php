@@ -7,22 +7,22 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    public function authenticate(Request $request)
-    {
-        $credentials = $request->validate([
-            'username' => ['required'],
-            'password' => ['required'],
-        ]);
+public function authenticate(Request $request)
+{
+    $credentials = $request->validate([
+        'username' => ['required'],
+        'password' => ['required'],
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('dashboard/');
-        }
+    $remember = $request->has('remember');
 
-        return back()->withErrors([
-            'username' => 'Login gagal.'
-        ]);
+    if (Auth::attempt($credentials, $remember)) {
+        $request->session()->regenerate();
+        return redirect()->intended(route('dashboard'));
     }
+
+    return back()->with('loginError', 'Login gagal! Username atau password salah.')->withInput();
+}
 
     public function logout(Request $request)
     {

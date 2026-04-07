@@ -78,23 +78,31 @@
         {{-- AREA KANAN (Header + Main) --}}
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             {{-- HEADER --}}
-            <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
-                <button @click="sidebarOpen = true" class="text-slate-500 lg:hidden focus:outline-none">
+        {{-- HEADER --}}
+        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+            {{-- Sisi Kiri: Tombol Hamburger untuk Mobile --}}
+            <div class="flex items-center">
+                <button @click="sidebarOpen = true" class="text-slate-500 lg:hidden focus:outline-none mr-4">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
+                {{-- Kamu bisa tambah breadcrumb di sini kalau mau --}}
+            </div>
 
-                <div class="flex items-center space-x-4">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-sm font-bold text-slate-700">{{ auth()->user()->name }}</p>
-                        <p class="text-xs text-slate-500 capitalize">{{ auth()->user()->role }}</p>
-                    </div>
-                    <div class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
-                        {{ substr(auth()->user()->name, 0, 1) }}
-                    </div>
+            {{-- Sisi Kanan: Profil User (Terdorong ke pojok kanan karena justify-between) --}}
+            <div class="flex items-center space-x-3">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-bold text-slate-700 leading-none mb-1">{{ auth()->user()->name }}</p>
+                    <p class="text-xs text-indigo-600 font-medium capitalize">{{ auth()->user()->role }}</p>
                 </div>
-            </header>
+
+                {{-- Inisial / Avatar --}}
+                <div class="h-10 w-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-200">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                </div>
+            </div>
+        </header>
 
             {{-- MAIN CONTENT --}}
             <main class="flex-1 overflow-y-auto p-6 bg-slate-50">

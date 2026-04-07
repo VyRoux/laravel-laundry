@@ -66,7 +66,7 @@ class OutletController extends Controller
         $request->validate([
             'name' => 'required',
             'address' => 'required',
-            'phone_number' => 'required',
+            'phone_number' => 'required|numeric',
         ]);
 
         $data = $request->all();

@@ -69,7 +69,17 @@ class MemberController extends Controller
      */
     public function update(Request $request, Member $member)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'gender' => 'required|in:laki-laki,perempuan',
+            'phone_number' => 'required|numeric',
+        ]);
+
+        $member->update($request->all());
+
+        return redirect()->route('member.index')
+            ->with('success', 'Data member berhasil diperbarui.');
     }
 
     /**

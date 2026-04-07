@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Daftar Member')
+@section('title', 'Daftar Pelanggan')
 
 @section('content')
 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
@@ -29,6 +29,11 @@
                 @forelse($members as $m)
                 <tr class="hover:bg-slate-50 transition-all">
                     <td class="px-6 py-4 font-medium text-slate-700">{{ $m->name }}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded-md text-xs font-bold {{ $m->gender == 'laki-laki' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-pink-600' }}">
+                            {{ $m->gender == 'laki-laki' ? 'L' : 'P' }}
+                        </span>
+                    </td>
                     <td class="px-6 py-4 text-slate-600 text-sm italic">
                         {{ $m->address ?? 'Alamat tidak diisi' }}
                     </td>
