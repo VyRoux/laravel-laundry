@@ -11,6 +11,11 @@
 /.phpunit.cache
 /.vscode
 /.zed
+
+# SFTP / FTP deploy credentials
+.sftp.json
+.sftp/
+.ftpconfig
 /auth.json
 /node_modules
 /public/build

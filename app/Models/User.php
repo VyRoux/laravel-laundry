@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
+    use SoftDeletes;
 
     protected $table = 'tbl_user';
     protected $fillable = [
@@ -21,9 +23,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // Membuat relasi dengan tabel outlet
     public function outlet()
     {
         return $this->belongsTo(Outlet::class, 'outlet_id');
+    }
+
+    public function transaksis()
+    {
+        return $this->hasMany(Transaksi::class, 'user_id');
     }
 }

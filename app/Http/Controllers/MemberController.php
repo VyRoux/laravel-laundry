@@ -7,32 +7,19 @@ use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        // Ambil data member dari database
-        $members = Member::all();
-        // Kirim ke view di folder resources/views/admin/member/index.blade.php
+        $members = Member::whereNull('deleted_at')->get();
         return view('admin.member.index', compact('members'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        // Tampilkan form untuk membuat member baru
         return view('admin.member.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // Validasi data yang baru masuk
         $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'required',
@@ -40,33 +27,22 @@ class MemberController extends Controller
             'gender' => 'required|in:laki-laki,perempuan',
         ]);
 
-        // JIka validasi berhasil, maka simpan data ini ke database
         Member::create($request->all());
 
-        // Seletah selesai, kembalikan ke halaman index
         return redirect()->route('member.index')
             ->with('success', 'Member berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Member $member)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Member $member)
     {
         return view('admin.member.edit', compact('member'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Member $member)
     {
         $request->validate([
@@ -82,13 +58,43 @@ class MemberController extends Controller
             ->with('success', 'Data member berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Member $member)
     {
+        if ($member->transaksis()->count() > 0) {
+            return back()->with('error', 'Member tidak bisa dihapus karena sudah memiliki transaksi!');
+        }
+
         $member->delete();
+
         return redirect()->route('member.index')
-            ->with('success','Member berhasil dihapus.');
+            ->with('success', 'Member berhasil dipindahkan ke tempat sampah.');
+    }
+
+    public function trashed()
+    {
+        $members = Member::onlyTrashed()->get();
+        return view('admin.member.trashed', compact('members'));
+    }
+
+    public function restore($id)
+    {
+        $member = Member::withTrashed()->findOrFail($id);
+        $member->restore();
+
+        return redirect()->route('member.trashed')
+            ->with('success', 'Member berhasil dipulihkan.');
+    }
+
+    public function forceDelete($id)
+    {
+        if (auth()->user()->role !== 'admin') {
+            return back()->with('error', 'Hanya admin yang bisa menghapus permanen!');
+        }
+
+        $member = Member::withTrashed()->findOrFail($id);
+        $member->forceDelete();
+
+        return redirect()->route('member.trashed')
+            ->with('success', 'Member berhasil dihapus permanen.');
     }
 }

@@ -6,9 +6,14 @@
 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
     <div class="p-6 border-b border-slate-100 flex justify-between items-center">
         <h3 class="font-bold text-slate-700">Data Outlet</h3>
-        <a href="{{ route('outlet.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-all">
-            + Tambah Outlet
-        </a>
+        <div class="flex space-x-2">
+            <a href="{{ route('outlet.trashed') }}" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                Tempat Sampah
+            </a>
+            <a href="{{ route('outlet.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-all">
+                + Tambah Outlet
+            </a>
+        </div>
     </div>
 
     <div class="overflow-x-auto">
@@ -32,7 +37,7 @@
                     <td class="px-6 py-4 text-center">
                         <div class="flex justify-center space-x-3">
                             <a href="{{ route('outlet.edit', $outlet->id) }}" class="text-amber-600 hover:underline">Edit</a>
-                            <form action="{{ route('outlet.destroy', $outlet->id) }}" method="POST" onsubmit="return confirm('Hapus?')">
+                            <form action="{{ route('outlet.destroy', $outlet->id) }}" method="POST" onsubmit="return confirm('Outlet akan dipindahkan ke tempat sampah. Lanjutkan?')">
                                 @csrf @method('DELETE')
                                 <button class="text-red-600 hover:underline">Hapus</button>
                             </form>

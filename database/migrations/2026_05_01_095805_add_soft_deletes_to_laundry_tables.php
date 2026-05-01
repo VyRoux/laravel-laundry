@@ -1,0 +1,54 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('tbl_outlet', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+
+        Schema::table('tbl_user', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+
+        Schema::table('tbl_member', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+
+        Schema::table('tbl_paket', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+
+        Schema::table('tbl_transaksi', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('tbl_outlet', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
+        Schema::table('tbl_user', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
+        Schema::table('tbl_member', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
+        Schema::table('tbl_paket', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
+        Schema::table('tbl_transaksi', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+    }
+};

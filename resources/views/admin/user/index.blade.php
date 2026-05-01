@@ -9,9 +9,14 @@
         <div>
             <h3 class="text-lg font-bold text-slate-700">Data Pengguna (Staff)</h3>
         </div>
-        <a href="{{ route('user.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all">
-            + Tambah User
-        </a>
+        <div class="flex space-x-2">
+            <a href="{{ route('user.trashed') }}" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                Tempat Sampah
+            </a>
+            <a href="{{ route('user.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                + Tambah User
+            </a>
+        </div>
     </div>
 
     {{-- Tabel --}}
@@ -45,7 +50,7 @@
                     <td class="px-6 py-4 text-center">
                         <div class="flex justify-center space-x-3 text-sm">
                             <a href="{{ route('user.edit', $user->id) }}" class="text-amber-600 hover:underline">Edit</a>
-                            <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus?')">
+                            <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('User akan dipindahkan ke tempat sampah. Lanjutkan?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:underline">Hapus</button>
                             </form>
