@@ -45,6 +45,14 @@
                 <div class="pt-4 pb-2">
                     <span class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Operasional</span>
                 </div>
+                <a href="{{ route('transaksi.index') }}" 
+                    class="flex items-center px-4 py-3 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition-all duration-200 {{ request()->routeIs('transaksi.*') ? 'bg-indigo-50 text-indigo-600 font-semibold' : '' }}">
+                    <span class="ml-3">Transaksi</span>
+                </a>
+                <a href="{{ route('paket.index') }}" 
+                    class="flex items-center px-4 py-3 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition-all duration-200 {{ request()->routeIs('paket.*') ? 'bg-indigo-50 text-indigo-600 font-semibold' : '' }}">
+                    <span class="ml-3">Paket</span>
+                </a>
                 <a href="{{ route('member.index') }}" 
                     class="flex items-center px-4 py-3 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition-all duration-200 {{ request()->routeIs('member.*') ? 'bg-indigo-50 text-indigo-600 font-semibold' : '' }}">
                     <span class="ml-3">Pelanggan</span>
