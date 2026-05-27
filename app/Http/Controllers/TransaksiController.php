@@ -56,7 +56,7 @@ class TransaksiController extends Controller
             'batas_waktu'       => 'required|date|after_or_equal:tgl',
             'biaya_tambahan'    => 'nullable|integer|min:0',
             'diskon'            => 'nullable|numeric|min:0|max:100',
-            'pajak'             => 'nullable|integer|min:0',
+            'pajak'             => 'nullable|numeric|min:0|max:100',
             'status'            => 'required|in:baru,proses,selesai,diambil',
             'dibayar'           => 'required|in:dibayar,belum_dibayar',
             'items'             => 'required|array|min:1',

@@ -15,31 +15,46 @@
             
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Pelanggan</label>
-                <input type="text" name="name" value="{{ $member->name }}" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" required>
+                <input type="text" name="name" value="{{ old('name', $member->name) }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('name') border-red-300 bg-red-50 @enderror" required>
+                @error('name')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
                 <div class="flex space-x-6">
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="gender" value="laki-laki" {{ $member->gender == 'laki-laki' ? 'checked' : '' }} class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" required>
+                        <input type="radio" name="gender" value="laki-laki" {{ old('gender', $member->gender) == 'laki-laki' ? 'checked' : '' }} class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" required>
                         <span class="text-sm text-slate-700">Laki-laki</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="gender" value="perempuan" {{ $member->gender == 'perempuan' ? 'checked' : '' }} class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                        <input type="radio" name="gender" value="perempuan" {{ old('gender', $member->gender) == 'perempuan' ? 'checked' : '' }} class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
                         <span class="text-sm text-slate-700">Perempuan</span>
                     </label>
                 </div>
+                @error('gender')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Alamat</label>
-                <textarea name="address" rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" required>{{ $member->address }}</textarea>
+                <textarea name="address" rows="3" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('address') border-red-300 bg-red-50 @enderror" required>{{ old('address', $member->address) }}</textarea>
+                @error('address')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Nomor Telepon</label>
-                <input type="text" name="phone_number" value="{{ $member->phone_number }}" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" required>
+                <input type="text" name="phone_number" value="{{ old('phone_number', $member->phone_number) }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('phone_number') border-red-300 bg-red-50 @enderror" required>
+                @error('phone_number')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="flex justify-end space-x-3 pt-4">

@@ -15,12 +15,15 @@
             @if(auth()->user()->role === 'admin')
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Outlet</label>
-                <select name="outlet_id" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" required>
+                <select name="outlet_id" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('outlet_id') border-red-300 bg-red-50 @enderror" required>
                     <option value="">-- Pilih Outlet --</option>
                     @foreach($outlets as $outlet)
-                        <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
+                        <option value="{{ $outlet->id }}" {{ old('outlet_id') == $outlet->id ? 'selected' : '' }}>{{ $outlet->name }}</option>
                     @endforeach
                 </select>
+                @error('outlet_id')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
             @else
                 <input type="hidden" name="outlet_id" value="{{ $outlets->first()->id }}">
@@ -28,24 +31,35 @@
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Jenis Paket</label>
-                <select name="jenis" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" required>
+                <select name="jenis" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('jenis') border-red-300 bg-red-50 @enderror" required>
                     <option value="">-- Pilih Jenis --</option>
-                    <option value="kiloan">Kiloan</option>
-                    <option value="selimut">Selimut</option>
-                    <option value="bed_cover">Bed Cover</option>
-                    <option value="kaos">Kaos</option>
-                    <option value="lainnya">Lainnya</option>
+                    <option value="kiloan" {{ old('jenis') == 'kiloan' ? 'selected' : '' }}>Kiloan</option>
+                    <option value="selimut" {{ old('jenis') == 'selimut' ? 'selected' : '' }}>Selimut</option>
+                    <option value="bed_cover" {{ old('jenis') == 'bed_cover' ? 'selected' : '' }}>Bed Cover</option>
+                    <option value="kaos" {{ old('jenis') == 'kaos' ? 'selected' : '' }}>Kaos</option>
+                    <option value="lainnya" {{ old('jenis') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
                 </select>
+                @error('jenis')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Paket</label>
-                <input type="text" name="nama_paket" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="Contoh: Cuci Reguler" required>
+                <input type="text" name="nama_paket" value="{{ old('nama_paket') }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('nama_paket') border-red-300 bg-red-50 @enderror" placeholder="Contoh: Cuci Reguler" required>
+                @error('nama_paket')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Harga (Rp)</label>
-                <input type="number" name="harga" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="0" min="0" required>
+                <input type="number" name="harga" value="{{ old('harga') }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('harga') border-red-300 bg-red-50 @enderror" placeholder="0" min="0" required>
+                @error('harga')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="flex justify-end space-x-3 pt-4">

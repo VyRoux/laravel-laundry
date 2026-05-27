@@ -14,17 +14,29 @@
             
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Outlet</label>
-                <input type="text" name="name" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="Contoh: Laundry Cabang Sudirman" required>
+                <input type="text" name="name" value="{{ old('name') }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('name') border-red-300 bg-red-50 @enderror" placeholder="Contoh: Laundry Cabang Sudirman" required>
+                @error('name')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Nomor Telepon</label>
-                <input type="text" name="phone_number" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="08xxxx" required>
+                <input type="text" name="phone_number" value="{{ old('phone_number') }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('phone_number') border-red-300 bg-red-50 @enderror" placeholder="08xxxx" required>
+                @error('phone_number')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Alamat (Opsional)</label>
-                <textarea name="address" rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="Alamat lengkap..."></textarea>
+                <textarea name="address" rows="3" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('address') border-red-300 bg-red-50 @enderror" placeholder="Alamat lengkap...">{{ old('address') }}</textarea>
+                @error('address')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="flex justify-end space-x-3 pt-4">

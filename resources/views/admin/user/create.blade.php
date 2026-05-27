@@ -3,49 +3,77 @@
 @section('title', 'Tambah User Baru')
 
 @section('content')
-<div class="bg-white rounded-lg shadow p-6 max-w-lg">
-    <form action="{{ route('user.store') }}" method="POST">
-        @csrf 
-        
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Nama</label>
-            <input type="text" name="name" class="w-full border rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-6 border-b border-slate-100">
+            <h3 class="text-lg font-bold text-slate-700">Form User Baru</h3>
         </div>
 
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
-            <input type="text" name="username" class="w-full border rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-        </div>
+        <form action="{{ route('user.store') }}" method="POST" class="p-6 space-y-4">
+            @csrf 
+            
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Nama</label>
+                <input type="text" name="name" value="{{ old('name') }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('name') border-red-300 bg-red-50 @enderror" required>
+                @error('name')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-            <input type="password" name="password" class="w-full border rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-        </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Username</label>
+                <input type="text" name="username" value="{{ old('username') }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('username') border-red-300 bg-red-50 @enderror" required>
+                @error('username')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Outlet</label>
-            <select name="outlet_id" class="w-full border rounded py-2 px-3">
-                @foreach ($outlets as $outlet)
-                    <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
-                @endforeach
-        </select>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+                <input type="password" name="password" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('password') border-red-300 bg-red-50 @enderror" required>
+                <p class="text-xs text-slate-400 mt-1">Minimal 6 karakter</p>
+                @error('password')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Role</label>
-            <select name="role" class="w-full border rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="" disabled selected>-- Pilih Role --</option>
-                <option value="admin">Admin</option>
-                <option value="kasir">Kasir</option>
-                <option value="owner">Owner</option>
-            </select>
-        </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Outlet</label>
+                <select name="outlet_id" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('outlet_id') border-red-300 bg-red-50 @enderror">
+                    @foreach ($outlets as $outlet)
+                        <option value="{{ $outlet->id }}" {{ old('outlet_id') == $outlet->id ? 'selected' : '' }}>{{ $outlet->name }}</option>
+                    @endforeach
+                </select>
+                @error('outlet_id')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <div class="flex items-center justify-between">
-            <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
-                Simpan Users
-            </button>
-            <a href="{{ route('user.index') }}" class="text-gray-600 hover:underline">Batal</a>
-        </div>
-    </form>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Role</label>
+                <select name="role" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('role') border-red-300 bg-red-50 @enderror">
+                    <option value="" disabled {{ old('role') ? '' : 'selected' }}>-- Pilih Role --</option>
+                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="kasir" {{ old('role') == 'kasir' ? 'selected' : '' }}>Kasir</option>
+                    <option value="owner" {{ old('role') == 'owner' ? 'selected' : '' }}>Owner</option>
+                </select>
+                @error('role')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4">
+                <a href="{{ route('user.index') }}" class="px-6 py-2 border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition-all">
+                    Batal
+                </a>
+                <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-semibold shadow-sm transition-all">
+                    Simpan User
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

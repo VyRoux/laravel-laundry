@@ -15,17 +15,29 @@
             
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Outlet</label>
-                <input type="text" name="name" value="{{ $outlet->name }}" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" required>
+                <input type="text" name="name" value="{{ old('name', $outlet->name) }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('name') border-red-300 bg-red-50 @enderror" required>
+                @error('name')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Nomor Telepon</label>
-                <input type="text" name="phone_number" value="{{ $outlet->phone_number }}" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" required>
+                <input type="text" name="phone_number" value="{{ old('phone_number', $outlet->phone_number) }}" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('phone_number') border-red-300 bg-red-50 @enderror" required>
+                @error('phone_number')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Alamat</label>
-                <textarea name="address" rows="3" class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">{{ $outlet->address }}</textarea>
+                <textarea name="address" rows="3" 
+                    class="w-full border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all @error('address') border-red-300 bg-red-50 @enderror">{{ old('address', $outlet->address) }}</textarea>
+                @error('address')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="flex justify-end space-x-3 pt-4">
