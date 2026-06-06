@@ -4,7 +4,7 @@
 
 @section('content')
 @php
-    $membersJson = $members->map(fn($m) => ['id' => $m->id, 'name' => $m->name, 'phone' => $m->phone_number]);
+    $membersJson = $members->map(fn($m) => ['id' => $m->id, 'name' => $m->name, 'phone' => $m->phone_number, 'code' => $m->created_at->format('Ym') . sprintf('%03d', $m->id)]);
     $paketsJson = $pakets->map(fn($p) => ['id' => $p->id, 'nama' => $p->nama_paket, 'harga' => $p->harga, 'jenis' => $p->jenis]);
 
     $oldItems = old('items');
@@ -27,7 +27,7 @@
 
     $oldMemberId = old('member_id');
     $oldMember = $oldMemberId ? $members->firstWhere('id', $oldMemberId) : null;
-    $oldMemberJson = $oldMember ? ['id' => $oldMember->id, 'name' => $oldMember->name, 'phone' => $oldMember->phone_number] : null;
+    $oldMemberJson = $oldMember ? ['id' => $oldMember->id, 'name' => $oldMember->name, 'phone' => $oldMember->phone_number, 'code' => $oldMember->created_at->format('Ym') . sprintf('%03d', $oldMember->id)] : null;
 @endphp
 
 <div class="max-w-4xl" x-data="{
@@ -47,7 +47,7 @@
     get filteredMembers() {
         if (!this.memberSearch) return this.members;
         const q = this.memberSearch.toLowerCase();
-        return this.members.filter(m => m.name.toLowerCase().includes(q) || m.phone.includes(q));
+        return this.members.filter(m => m.name.toLowerCase().includes(q) || m.phone.includes(q) || m.code.includes(q));
     },
 
     selectMember(m) {
@@ -125,6 +125,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Outlet</label>
+                            @if(auth()->user()->role === 'admin')
                             <select name="outlet_id" class="w-full border rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('outlet_id') border-red-300 bg-red-50 @enderror" required>
                                 @foreach ($outlets as $outlet)
                                     <option value="{{ $outlet->id }}" {{ old('outlet_id', auth()->user()->outlet_id) == $outlet->id ? 'selected' : '' }}>
@@ -132,6 +133,12 @@
                                     </option>
                                 @endforeach
                             </select>
+                            @else
+                            <input type="hidden" name="outlet_id" value="{{ auth()->user()->outlet_id }}">
+                            <div class="w-full border border-slate-200 rounded-xl px-4 py-2.5 bg-slate-50 text-slate-600 text-sm">
+                                {{ auth()->user()->outlet->name ?? 'Outlet tidak ditemukan' }}
+                            </div>
+                            @endif
                             @error('outlet_id')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
 
@@ -165,10 +172,13 @@
                                 class="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                 <template x-for="m in filteredMembers" :key="m.id">
                                     <li @click="selectMember(m)" 
-                                        class="px-4 py-2.5 hover:bg-indigo-50 cursor-pointer text-sm flex justify-between"
+                                        class="px-4 py-2.5 hover:bg-indigo-50 cursor-pointer text-sm"
                                         :class="memberSelected && memberSelected.id === m.id ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700'">
-                                        <span x-text="m.name"></span>
-                                        <span class="text-xs text-slate-400" x-text="m.phone"></span>
+                                        <div class="flex items-center justify-between">
+                                            <span x-text="m.name"></span>
+                                            <span class="text-xs text-slate-400 font-mono ml-4" x-text="m.code"></span>
+                                        </div>
+                                        <div class="text-xs text-slate-400" x-text="'telp: ' + m.phone"></div>
                                     </li>
                                 </template>
                             </ul>

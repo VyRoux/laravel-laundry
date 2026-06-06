@@ -19,6 +19,7 @@
         <table class="w-full text-left">
             <thead class="bg-slate-50 text-slate-600 text-xs uppercase font-semibold">
                 <tr>
+                    <th class="px-6 py-4 text-center">NO</th>
                     <th class="px-6 py-4">Nama</th>
                     <th class="px-6 py-4">Username</th>
                     <th class="px-6 py-4">Outlet</th>
@@ -29,6 +30,7 @@
             <tbody class="divide-y divide-slate-100">
                 @forelse($users as $user)
                 <tr class="hover:bg-slate-50 transition-all">
+                    <td class="px-6 py-4 text-center text-xs text-slate-400 font-mono">{{ $user->created_at->format('dmY') }}{{ sprintf('%03d', $user->id) }}</td>
                     <td class="px-6 py-4 font-medium text-slate-700">{{ $user->name }}</td>
                     <td class="px-6 py-4 font-mono text-sm text-slate-500">{{ $user->username }}</td>
                     <td class="px-6 py-4 text-sm text-slate-600">
@@ -42,19 +44,19 @@
                             {{ $user->role }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-center">
-                        <div class="flex justify-center space-x-3 text-sm">
-                            <a href="{{ route('user.edit', $user->id) }}" class="text-amber-600 hover:underline">Edit</a>
-                            <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('User akan dipindahkan ke tempat sampah. Lanjutkan?')">
+                    <td class="px-6 py-4 text-center whitespace-nowrap">
+                        <div class="inline-flex items-center gap-1.5">
+                            <a href="{{ route('user.edit', $user->id) }}" class="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Edit</a>
+                            <form action="{{ route('user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('User akan dipindahkan ke tempat sampah. Lanjutkan?')" class="m-0 p-0">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline">Hapus</button>
+                                <button type="submit" class="inline-flex items-center bg-red-500 hover:bg-red-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Hapus</button>
                             </form>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-10 text-center text-slate-400 italic">Belum ada data pengguna.</td>
+                    <td colspan="6" class="px-6 py-10 text-center text-slate-400 italic">Belum ada data pengguna.</td>
                 </tr>
                 @endforelse
             </tbody>

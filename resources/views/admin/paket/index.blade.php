@@ -41,12 +41,12 @@
                     </td>
                     <td class="px-6 py-4 font-medium text-slate-700">{{ $p->nama_paket }}</td>
                     <td class="px-6 py-4 font-mono text-sm text-slate-600">Rp {{ number_format($p->harga, 0, ',', '.') }}</td>
-                    <td class="px-6 py-4 text-center">
-                        <div class="flex justify-center space-x-3 text-sm">
-                            <a href="{{ route('paket.edit', $p->id) }}" class="text-amber-600 hover:underline">Edit</a>
-                            <form action="{{ route('paket.destroy', $p->id) }}" method="POST" class="inline" onsubmit="return confirm('Paket akan dipindahkan ke tempat sampah. Lanjutkan?')">
+                    <td class="px-6 py-4 text-center whitespace-nowrap">
+                        <div class="inline-flex items-center gap-1.5">
+                            <a href="{{ route('paket.edit', $p->id) }}" class="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Edit</a>
+                            <form action="{{ route('paket.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Paket akan dipindahkan ke tempat sampah. Lanjutkan?')" class="m-0 p-0">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline">Hapus</button>
+                                <button type="submit" class="inline-flex items-center bg-red-500 hover:bg-red-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Hapus</button>
                             </form>
                         </div>
                     </td>

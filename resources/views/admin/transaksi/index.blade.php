@@ -18,6 +18,7 @@
             <thead class="bg-slate-50 text-slate-600 text-xs uppercase font-semibold">
                 <tr>
                     <th class="px-6 py-4">Invoice</th>
+                    <th class="px-6 py-4">NO</th>
                     <th class="px-6 py-4">Member</th>
                     <th class="px-6 py-4">Tanggal</th>
                     <th class="px-6 py-4">Status</th>
@@ -38,7 +39,22 @@
                     <td class="px-6 py-4">
                         <span class="font-mono text-sm font-bold text-indigo-600">{{ $t->kode_invoice }}</span>
                     </td>
-                    <td class="px-6 py-4 font-medium text-slate-700">{{ $t->member->name ?? 'N/A' }}</td>
+                    <td class="px-6 py-4 text-center">
+                        @if($t->member)
+                            <span class="text-xs text-slate-400 font-mono">{{ $t->member->created_at->format('Ym') }}{{ sprintf('%03d', $t->member->id) }}</span>
+                        @else
+                            <span class="text-xs text-slate-300">-</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="font-medium text-slate-700">{{ $t->member->name ?? 'N/A' }}</div>
+                        @if($t->member && $t->member->phone_number)
+                            <div class="text-xs text-slate-400 font-mono">telp: {{ $t->member->phone_number }}</div>
+                        @endif
+                        @if($t->member)
+                            <div class="text-xs text-slate-300 font-mono">#{{ $t->member->id }}</div>
+                        @endif
+                    </td>
                     <td class="px-6 py-4 text-sm text-slate-600">{{ \Carbon\Carbon::parse($t->tgl)->format('d M Y, H:i') }}</td>
                     <td class="px-6 py-4">
                         <span class="capitalize px-3 py-1 rounded-lg text-xs font-bold 
@@ -57,22 +73,43 @@
                     <td class="px-6 py-4 text-right font-mono text-sm font-bold text-slate-700">
                         Rp {{ number_format($total, 0, ',', '.') }}
                     </td>
-                    <td class="px-6 py-4 text-center">
-                        <div class="flex justify-center space-x-3 text-sm">
-                            <a href="{{ route('transaksi.show', $t->id) }}" class="text-indigo-600 hover:underline">Detail</a>
-                            <a href="{{ route('transaksi.edit', $t->id) }}" class="text-amber-600 hover:underline">Edit</a>
-                            @if($t->dibayar !== 'dibayar')
-                            <form action="{{ route('transaksi.destroy', $t->id) }}" method="POST" class="inline" onsubmit="return confirm('Transaksi akan dipindahkan ke tempat sampah. Lanjutkan?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline">Hapus</button>
+                    <td class="px-6 py-4 text-center whitespace-nowrap">
+                        <div class="inline-flex items-center gap-1.5">
+                            <a href="{{ route('transaksi.show', $t->id) }}" class="inline-flex items-center bg-indigo-500 hover:bg-indigo-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Detail</a>
+                            @if($t->status === 'baru')
+                            <form action="{{ route('transaksi.update', $t->id) }}" method="POST" class="m-0 p-0">
+                                @csrf @method('PUT')
+                                <input type="hidden" name="status" value="proses">
+                                <input type="hidden" name="dibayar" value="{{ $t->dibayar }}">
+                                <button type="submit" class="inline-flex items-center bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Proses</button>
+                            </form>
+                            @elseif($t->status === 'proses')
+                            <form action="{{ route('transaksi.update', $t->id) }}" method="POST" class="m-0 p-0">
+                                @csrf @method('PUT')
+                                <input type="hidden" name="status" value="selesai">
+                                <input type="hidden" name="dibayar" value="{{ $t->dibayar }}">
+                                <button type="submit" class="inline-flex items-center bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Selesai</button>
+                            </form>
+                            @elseif($t->status === 'selesai')
+                            <form action="{{ route('transaksi.update', $t->id) }}" method="POST" class="m-0 p-0">
+                                @csrf @method('PUT')
+                                <input type="hidden" name="status" value="diambil">
+                                <input type="hidden" name="dibayar" value="{{ $t->dibayar }}">
+                                <button type="submit" class="inline-flex items-center bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Diambil</button>
                             </form>
                             @endif
+                            <a href="{{ route('transaksi.edit', $t->id) }}" class="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Edit</a>
+                            @php $hapusDisabled = ($t->dibayar === 'dibayar'); @endphp
+                            <form action="{{ route('transaksi.destroy', $t->id) }}" method="POST" onsubmit="return @js(!$hapusDisabled) && confirm('Transaksi akan dipindahkan ke tempat sampah. Lanjutkan?')" class="m-0 p-0">
+                                @csrf @method('DELETE')
+                                <button type="submit" {{ $hapusDisabled ? 'disabled' : '' }} class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium transition-colors {{ $hapusDisabled ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600 text-white' }}">Hapus</button>
+                            </form>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="px-6 py-10 text-center text-slate-400 italic">Belum ada data transaksi.</td>
+                    <td colspan="8" class="px-6 py-10 text-center text-slate-400 italic">Belum ada data transaksi.</td>
                 </tr>
                 @endforelse
             </tbody>

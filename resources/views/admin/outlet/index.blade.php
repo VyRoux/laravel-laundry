@@ -29,12 +29,12 @@
                     <td class="px-6 py-4 text-slate-600 text-sm">
                         {{ $outlet->address ?? 'Alamat tidak diisi' }}
                     </td>
-                    <td class="px-6 py-4 text-center">
-                        <div class="flex justify-center space-x-3">
-                            <a href="{{ route('outlet.edit', $outlet->id) }}" class="text-amber-600 hover:underline">Edit</a>
-                            <form action="{{ route('outlet.destroy', $outlet->id) }}" method="POST" onsubmit="return confirm('Outlet akan dipindahkan ke tempat sampah. Lanjutkan?')">
+                    <td class="px-6 py-4 text-center whitespace-nowrap">
+                        <div class="inline-flex items-center gap-1.5">
+                            <a href="{{ route('outlet.edit', $outlet->id) }}" class="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Edit</a>
+                            <form action="{{ route('outlet.destroy', $outlet->id) }}" method="POST" onsubmit="return confirm('Outlet akan dipindahkan ke tempat sampah. Lanjutkan?')" class="m-0 p-0">
                                 @csrf @method('DELETE')
-                                <button class="text-red-600 hover:underline">Hapus</button>
+                                <button type="submit" class="inline-flex items-center bg-red-500 hover:bg-red-600 text-white px-2.5 py-1 rounded-md text-xs font-medium transition-colors">Hapus</button>
                             </form>
                         </div>
                     </td>

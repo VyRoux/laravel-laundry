@@ -19,6 +19,7 @@
             <thead class="bg-slate-50 text-slate-600 text-xs uppercase font-semibold">
                 <tr>
                     <th class="px-6 py-4">Invoice</th>
+                    <th class="px-6 py-4 text-center">NO</th>
                     <th class="px-6 py-4">Member</th>
                     <th class="px-6 py-4">Status</th>
                     <th class="px-6 py-4">Dihapus</th>
@@ -29,7 +30,22 @@
                 @forelse($transaksi as $t)
                 <tr class="hover:bg-slate-50 transition-all bg-slate-50/50">
                     <td class="px-6 py-4 font-mono text-sm font-bold text-indigo-500">{{ $t->kode_invoice }}</td>
-                    <td class="px-6 py-4 text-slate-500">{{ $t->member->name ?? 'N/A' }}</td>
+                    <td class="px-6 py-4 text-center">
+                        @if($t->member)
+                            <span class="text-xs text-slate-400 font-mono">{{ $t->member->created_at->format('Ym') }}{{ sprintf('%03d', $t->member->id) }}</span>
+                        @else
+                            <span class="text-xs text-slate-300">-</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-slate-500">{{ $t->member->name ?? 'N/A' }}</div>
+                        @if($t->member && $t->member->phone_number)
+                            <div class="text-xs text-slate-400 font-mono">telp: {{ $t->member->phone_number }}</div>
+                        @endif
+                        @if($t->member)
+                            <div class="text-xs text-slate-300 font-mono">#{{ $t->member->id }}</div>
+                        @endif
+                    </td>
                     <td class="px-6 py-4">
                         <span class="capitalize px-3 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-500">{{ $t->status }}</span>
                     </td>
@@ -51,7 +67,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-10 text-center text-slate-400 italic">Tempat sampah kosong.</td>
+                    <td colspan="6" class="px-6 py-10 text-center text-slate-400 italic">Tempat sampah kosong.</td>
                 </tr>
                 @endforelse
             </tbody>

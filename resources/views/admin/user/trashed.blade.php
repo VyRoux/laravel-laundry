@@ -18,6 +18,7 @@
         <table class="w-full text-left">
             <thead class="bg-slate-50 text-slate-600 text-xs uppercase font-semibold">
                 <tr>
+                    <th class="px-6 py-4 text-center">NO</th>
                     <th class="px-6 py-4">Nama</th>
                     <th class="px-6 py-4">Username</th>
                     <th class="px-6 py-4">Role</th>
@@ -28,6 +29,7 @@
             <tbody class="divide-y divide-slate-100">
                 @forelse($users as $u)
                 <tr class="hover:bg-slate-50 transition-all bg-slate-50/50">
+                    <td class="px-6 py-4 text-center text-xs text-slate-400 font-mono">{{ $u->created_at->format('dmY') }}{{ sprintf('%03d', $u->id) }}</td>
                     <td class="px-6 py-4 font-medium text-slate-500">{{ $u->name }}</td>
                     <td class="px-6 py-4 font-mono text-sm text-slate-400">{{ $u->username }}</td>
                     <td class="px-6 py-4"><span class="capitalize px-3 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-500">{{ $u->role }}</span></td>
@@ -47,7 +49,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-10 text-center text-slate-400 italic">Tempat sampah kosong.</td>
+                    <td colspan="6" class="px-6 py-10 text-center text-slate-400 italic">Tempat sampah kosong.</td>
                 </tr>
                 @endforelse
             </tbody>

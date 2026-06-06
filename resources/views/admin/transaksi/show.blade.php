@@ -48,6 +48,7 @@
             <div>
                 <p class="text-xs font-bold text-slate-500 uppercase mb-2 border-b border-slate-200 pb-1">Informasi Pelanggan</p>
                 <p class="text-sm text-slate-700"><span class="font-semibold">Nama:</span> {{ $transaksi->member->name }}</p>
+                <p class="text-sm text-slate-700"><span class="font-semibold">ID:</span> {{ $transaksi->member->created_at->format('Ym') }}{{ sprintf('%03d', $transaksi->member->id) }}</p>
                 <p class="text-sm text-slate-700"><span class="font-semibold">Alamat:</span> {{ $transaksi->member->address ?? '-' }}</p>
                 <p class="text-sm text-slate-700"><span class="font-semibold">Telepon:</span> {{ $transaksi->member->phone_number }}</p>
             </div>

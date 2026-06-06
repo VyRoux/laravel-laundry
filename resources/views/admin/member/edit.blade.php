@@ -7,6 +7,7 @@
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div class="p-6 border-b border-slate-100">
             <h3 class="text-lg font-bold text-slate-700">Form Edit Pelanggan</h3>
+            <p class="text-xs text-slate-400 mt-1">ID: {{ $member->created_at->format('Ym') }}{{ sprintf('%03d', $member->id) }}</p>
         </div>
 
         <form action="{{ route('member.update', $member->id) }}" method="POST" class="p-6 space-y-4">

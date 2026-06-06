@@ -7,7 +7,7 @@
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div class="p-6 border-b border-slate-100">
             <h3 class="text-lg font-bold text-slate-700">Edit Status Transaksi</h3>
-            <p class="text-sm text-slate-500 mt-1">Invoice: {{ $transaksi->kode_invoice }} — Member: {{ $transaksi->member->name }}</p>
+            <p class="text-sm text-slate-500 mt-1">Invoice: {{ $transaksi->kode_invoice }} — Member: {{ $transaksi->member->name }} ({{ $transaksi->member->created_at->format('Ym') }}{{ sprintf('%03d', $transaksi->member->id) }})</p>
         </div>
 
         <form action="{{ route('transaksi.update', $transaksi->id) }}" method="POST" class="p-6 space-y-5">

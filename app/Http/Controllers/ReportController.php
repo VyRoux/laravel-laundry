@@ -72,8 +72,8 @@ class ReportController extends Controller
                 DB::raw('COUNT(DISTINCT tbl_transaksi.id) as jumlah_transaksi'),
                 DB::raw('SUM(tbl_detail_transaksi.qty * tbl_paket.harga) as subtotal'),
                 DB::raw('COALESCE(SUM(tbl_transaksi.biaya_tambahan), 0) as biaya_tambahan'),
-                DB::raw('AVG(tbl_transaksi.diskon) as diskon'),
-                DB::raw('AVG(tbl_transaksi.pajak) as pajak')
+                DB::raw('SUM(tbl_transaksi.diskon * tbl_detail_transaksi.qty * tbl_paket.harga / 100) as diskon_amount'),
+                DB::raw('SUM(tbl_transaksi.pajak * tbl_detail_transaksi.qty * tbl_paket.harga / 100) as pajak_amount')
             );
 
         if ($user->role === 'kasir') {
@@ -85,12 +85,8 @@ class ReportController extends Controller
         $results = $query->groupBy('tbl_transaksi.outlet_id')->get();
 
         return $results->map(function ($item) {
-            $diskonRupiah = $item->subtotal * ($item->diskon / 100);
-            $pajakRupiah  = $item->subtotal * ($item->pajak / 100);
-            $item->outlet        = Outlet::withTrashed()->find($item->outlet_id)->name ?? 'Unknown';
-            $item->diskon_amount = $diskonRupiah;
-            $item->pajak_amount  = $pajakRupiah;
-            $item->total_bersih  = $item->subtotal + $item->biaya_tambahan - $diskonRupiah + $pajakRupiah;
+            $item->outlet       = Outlet::withTrashed()->find($item->outlet_id)->name ?? 'Unknown';
+            $item->total_bersih = $item->subtotal + $item->biaya_tambahan - $item->diskon_amount + $item->pajak_amount;
             return $item;
         });
     }
@@ -115,9 +111,10 @@ class ReportController extends Controller
             $query->where('dibayar', $request->dibayar);
         }
 
-        $results = $query->orderBy('tgl', 'desc')->get();
+        $results = $query->orderBy('tgl', 'desc')->paginate(20);
+        $results->withQueryString();
 
-        return $results->map(function ($t) {
+        $results->getCollection()->transform(function ($t) {
             $subtotal = $t->details->sum(fn($d) => $d->qty * ($d->paket->harga ?? 0));
             $diskon = $subtotal * ($t->diskon / 100);
             $pajak  = $subtotal * ($t->pajak / 100);
@@ -127,6 +124,8 @@ class ReportController extends Controller
             $t->total         = $subtotal - $diskon + ($t->biaya_tambahan ?? 0) + $pajak;
             return $t;
         });
+
+        return $results;
     }
 
     private function laporanPerOutlet(Request $request, $user)
@@ -144,11 +143,13 @@ class ReportController extends Controller
                 DB::raw('COUNT(DISTINCT tbl_transaksi.id) as jumlah_transaksi'),
                 DB::raw('SUM(tbl_detail_transaksi.qty * tbl_paket.harga) as subtotal'),
                 DB::raw('COALESCE(SUM(tbl_transaksi.biaya_tambahan), 0) as biaya_tambahan'),
-                DB::raw('AVG(tbl_transaksi.diskon) as diskon'),
-                DB::raw('AVG(tbl_transaksi.pajak) as pajak')
+                DB::raw('SUM(tbl_transaksi.diskon * tbl_detail_transaksi.qty * tbl_paket.harga / 100) as diskon_amount'),
+                DB::raw('SUM(tbl_transaksi.pajak * tbl_detail_transaksi.qty * tbl_paket.harga / 100) as pajak_amount')
             );
 
-        if ($request->outlet_id) {
+        if ($user->role === 'kasir') {
+            $query->where('tbl_transaksi.outlet_id', $user->outlet_id);
+        } elseif ($request->outlet_id) {
             $query->where('tbl_transaksi.outlet_id', $request->outlet_id);
         }
 
@@ -158,12 +159,8 @@ class ReportController extends Controller
             ->get();
 
         return $results->map(function ($item) {
-            $diskonRupiah = $item->subtotal * ($item->diskon / 100);
-            $pajakRupiah  = $item->subtotal * ($item->pajak / 100);
-            $item->outlet        = Outlet::withTrashed()->find($item->outlet_id)->name ?? 'Unknown';
-            $item->diskon_amount = $diskonRupiah;
-            $item->pajak_amount  = $pajakRupiah;
-            $item->total_bersih  = $item->subtotal + $item->biaya_tambahan - $diskonRupiah + $pajakRupiah;
+            $item->outlet       = Outlet::withTrashed()->find($item->outlet_id)->name ?? 'Unknown';
+            $item->total_bersih = $item->subtotal + $item->biaya_tambahan - $item->diskon_amount + $item->pajak_amount;
             return $item;
         });
     }

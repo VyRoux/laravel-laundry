@@ -65,12 +65,19 @@ class TransaksiController extends Controller
             'items.*.keterangan'=> 'nullable|string',
         ]);
 
+        $user = auth()->user();
+        $outletId = $user->role === 'admin' ? $request->outlet_id : $user->outlet_id;
+
+        if ($user->role !== 'admin' && $user->outlet_id != $request->outlet_id) {
+            return back()->with('error', 'Anda hanya bisa membuat transaksi untuk outlet Anda sendiri.')->withInput();
+        }
+
         $kodeInvoice = $this->generateKodeInvoice();
 
-        DB::transaction(function () use ($request, $kodeInvoice) {
+        DB::transaction(function () use ($request, $kodeInvoice, $outletId) {
 
             $transaksi = Transaksi::create([
-                'outlet_id'      => $request->outlet_id,
+                'outlet_id'      => $outletId,
                 'kode_invoice'   => $kodeInvoice,
                 'member_id'      => $request->member_id,
                 'tgl'            => $request->tgl,
